@@ -63,15 +63,23 @@ def vector_to_word(word_vector, alphabet):
 def mod(vector, n):
     for i in range(len(vector)):
         vector[i] %= n
+    return vector
 
 
-
-def encrypt_word(encrypt_matrix, word_vectors):
+def encrypt_word(encrypt_matrix, word_vectors, n):
+    #print(encrypt_matrix, word_vectors, n)
     encrypt_matrix_arr = np.array(encrypt_matrix)
     word_arr = np.array(word_vectors)
-    text_vector = []
+    print("-----")
+    print(encrypt_matrix)
+    print("----")
+    print(word_arr)
+    print('-----')
+    text_vector = np.zeros(shape=(len(word_arr), encrypt_matrix_arr.shape[1]), dtype=int)
     for i in range(word_arr.shape[0]):
-        pass
+        text_vector[i] = mod(np.dot(word_arr[i], encrypt_matrix_arr), n)
+    return text_vector
+
 
 
 
@@ -81,9 +89,9 @@ if __name__ == "__main__":
     custom_alphabet.append(" ")
     custom_alphabet.sort()
     n = len(custom_alphabet)
-    message = "ш"
-    custom_encrypt_matrix = encrypt_matrix_former("альпинист", custom_alphabet)
-    random_key_word = key_word_generator(custom_alphabet, 4)
+    message = "ботай_матан!"
+    random_key_word = key_word_generator(custom_alphabet, 3)
+    custom_encrypt_matrix = encrypt_matrix_former(random_key_word, custom_alphabet)
     text = word_to_vectors(message, custom_alphabet, random_key_word)
     real_text = vector_to_word(text, custom_alphabet)
-    print(real_text)
+    print(encrypt_word(custom_encrypt_matrix, text, n))
